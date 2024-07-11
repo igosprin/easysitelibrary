@@ -17,11 +17,11 @@ class Request implements RequestInterface
     {
         $requestParam = $this->getRequestUrl($languages_list);
         $this->_request_uri = $requestParam['uri'];
-        $this->_request_method = $_SERVER['REQUEST_METHOD'];
-        $this->_request_query_string = $_SERVER['QUERY_STRING'];
-        $this->_request_accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+        $this->_request_method = $_SERVER['REQUEST_METHOD'] ?? 'get';
+        $this->_request_query_string = $_SERVER['QUERY_STRING'] ?? '';
+        $this->_request_accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'eng';
         $this->_request_language = $requestParam['languages'];
-        $this->_request_IpAddress = $_SERVER['REMOTE_ADDR'];
+        $this->_request_IpAddress = $_SERVER['REMOTE_ADDR'] ?? '';
         $this->_request_remote_address = $_SERVER['REMOTE_HOST'] ?? '';
     }
 
