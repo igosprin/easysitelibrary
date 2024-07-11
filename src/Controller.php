@@ -14,13 +14,18 @@ class Controller
     {
         $this->view = new View;
     }
-    public function setRequest(array $languages_list = ['eng'])
+    private function setRequest(array $languages_list = ['eng'])
     {
         $this->_request = new Request($languages_list);
     }
     public function getRequest()
     {
         return $this->_request;
+    }
+
+    private function setViewPath(string $path)
+    {
+        $this->view->setViewPath($path);
     }
 
 

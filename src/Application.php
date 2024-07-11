@@ -7,11 +7,13 @@ class Application
 {
     private $route;
     private $controller_path;
+    private $view_path;
     private $languages_list;
-    function __construct(string $controller_path, array $routes, array $languages_list = ['eng'])
+    function __construct(string $controller_path, string $view_path = '', array $routes, array $languages_list = ['eng'])
     {
         $this->route = new Route($routes);
         $this->controller_path = $controller_path;
+        $this->view_path = $view_path;
         $this->languages_list = $languages_list;
     }
 
@@ -34,6 +36,7 @@ class Application
             $this->getLoadError('None class');
 
         $event_class->setRequest($this->languages_list);
+        $event_class->setViewPath($this->view_path);
         $event_class->_url_params = $action['params'];
 
         $method_name = $action['action'] . 'Action';

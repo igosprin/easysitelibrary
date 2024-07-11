@@ -1,12 +1,15 @@
 <?php
 namespace Easysite\Library\View;
-use Easysite\Library\PageElement;
+
+use Easysite\Library\View\PageElement;
 use Easysite\Library\Interface\iView;
+use Exception;
 
 class View implements iView
 {
     public mixed $pageElement;
-    private string $layoutDefault = 'gggg';
+    private string $layoutDefault;
+    private string $view_path;
     function __construct()
     {
         $this->pageElement = new PageElement;
@@ -71,9 +74,14 @@ class View implements iView
     {
         $this->layoutDefault = $layout;
     }
+
+    public function setViewPath(string $path = '')
+    {
+        $this->view_path = $path;
+    }
     protected function templatePath(string $template): string
     {
-        $templatePath = PATH_VIEW . $template;
+        $templatePath = $this->view_path . $template;
         if (!file_exists($templatePath))
             throw new Exception("None template:{$template} ");
         return $templatePath;

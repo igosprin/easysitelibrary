@@ -1,5 +1,6 @@
 <?php
-namespace  Easysite\Library\Interface;
+namespace Easysite\Library\Interface;
+
 interface iView
 {
     public function render(string $template, mixed $data = [], bool $layout = true);
@@ -19,6 +20,8 @@ interface iView
     public function setContent(string $content_stream = '');
 
     public function setLayout(string $layout = '');
+
+    public function setViewPath(string $path = '');
 
 
 }
