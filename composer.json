@@ -1,0 +1,15 @@
+{
+    "name": "easysite/library",
+    "authors": [
+        {
+            "name": "igorarbitas",
+            "email": "igor@arbitas.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+   "psr-4": {
+     "Easysite\\Library\\": "src/"
+   }
+ }
+}
