@@ -1,6 +1,7 @@
 <?php
-namespace  Easysite\Library\Interface;
-interface iPageElement
+namespace Easysite\Library\Interface;
+
+interface PageElementInterface
 {
     public function setTitle(string $title = '');
     public function getTitle(): string;

@@ -6,10 +6,10 @@ use Easysite\Library\Route;
 class Application
 {
     private $route;
-    private $controller_path;
-    private $view_path;
+    private $controller_path = '';
+    private $view_path = '';
     private $languages_list;
-    function __construct(string $controller_path, string $view_path = '', array $routes, array $languages_list = ['eng'])
+    function __construct(string $controller_path, string $view_path, array $routes, array $languages_list = ['eng'])
     {
         $this->route = new Route($routes);
         $this->controller_path = $controller_path;

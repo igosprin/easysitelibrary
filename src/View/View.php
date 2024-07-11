@@ -2,10 +2,10 @@
 namespace Easysite\Library\View;
 
 use Easysite\Library\View\PageElement;
-use Easysite\Library\Interface\iView;
+use Easysite\Library\Interface\ViewInterface;
 use Exception;
 
-class View implements iView
+class View implements ViewInterface
 {
     public mixed $pageElement;
     private string $layoutDefault;

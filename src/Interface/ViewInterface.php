@@ -1,7 +1,7 @@
 <?php
 namespace Easysite\Library\Interface;
 
-interface iView
+interface ViewInterface
 {
     public function render(string $template, mixed $data = [], bool $layout = true);
     public function renderBlock(string $template, mixed $data = []);

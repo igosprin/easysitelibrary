@@ -1,7 +1,9 @@
 <?php
 namespace Easysite\Library\View;
-use Easysite\Library\Interface\iPageElement;
-class PageElement implements iPageElement
+
+use Easysite\Library\Interface\PageElementInterface;
+
+class PageElement implements PageElementInterface
 {
     protected string $title;
     protected array $scripts;

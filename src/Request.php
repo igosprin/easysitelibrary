@@ -1,9 +1,9 @@
 <?php
 namespace Easysite\Library;
 
-use Easysite\Library\Interface\iRequestInterface;
+use Easysite\Library\Interface\RequestInterface;
 
-class Request implements iRequestInterface
+class Request implements RequestInterface
 {
     private string $_request_uri;
     private string $_request_method;

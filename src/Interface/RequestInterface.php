@@ -1,6 +1,7 @@
 <?php
-namespace  Easysite\Library\Interface;
-interface iRequestInterface
+namespace Easysite\Library\Interface;
+
+interface RequestInterface
 {
     public function getRequestUri();
     public function getRequestMethod();

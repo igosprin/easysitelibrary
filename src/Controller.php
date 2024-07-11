@@ -14,7 +14,7 @@ class Controller
     {
         $this->view = new View;
     }
-    private function setRequest(array $languages_list = ['eng'])
+    public function setRequest(array $languages_list = ['eng'])
     {
         $this->_request = new Request($languages_list);
     }
@@ -23,7 +23,7 @@ class Controller
         return $this->_request;
     }
 
-    private function setViewPath(string $path)
+    public function setViewPath(string $path)
     {
         $this->view->setViewPath($path);
     }
