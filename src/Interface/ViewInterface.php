@@ -4,6 +4,7 @@ namespace Easysite\Library\Interface;
 interface ViewInterface
 {
     public function render(string $template, mixed $data = [], bool $layout = true);
+
     public function renderBlock(string $template, mixed $data = []);
 
     public function setTitle(string $title = '');
@@ -11,6 +12,7 @@ interface ViewInterface
     public function setScripts(array $scripts = []);
 
     public function setStyles(array $styles = []);
+    
     public function setContentLanguages(string $content_languages = '');
 
     public function setKeywords(array $keywords = []);

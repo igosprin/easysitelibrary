@@ -9,12 +9,16 @@ class Application
     private $controller_path = '';
     private $view_path = '';
     private $languages_list;
-    function __construct(string $controller_path, string $view_path, array $routes, array $languages_list = ['eng'])
+    private $config;
+    private $session;
+    function __construct(Config $config)
     {
-        $this->route = new Route($routes);
-        $this->controller_path = $controller_path;
-        $this->view_path = $view_path;
-        $this->languages_list = $languages_list;
+        $this->config=$config;
+        $this->session=new Easysite\Library\Session($config->get('session'));
+        $this->route = new Route($config);
+        $this->controller_path = $config->get('pathController');
+        $this->view_path = $config->get('viewPath');
+        $this->languages_list = $config->get('languagesList',['eng']);
     }
 
     public function init()

@@ -2,16 +2,18 @@
 namespace Easysite\Library;
 
 use Easysite\Library\Request;
+use Easysite\Library\Config;
 use InvalidArgumentException;
 
 class Route extends Request
 {
     private array $_routs;
-    //private array $_languages;
-    function __construct(array $_routs, array $languages_list = ['eng'])
+    
+    function __construct(Config $config)
     {
-        parent::__construct($languages_list);
-        $this->_routs = $this->getUserRoutsMap($_routs);
+        parent::__construct($config->get('languagesList',false));
+        $this->_routs = $this->getUserRoutsMap($config->get('routs',[]));
+        
         //$this->_languages = $languages_list;
     }
     /**
