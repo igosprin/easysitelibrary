@@ -2,6 +2,7 @@
 namespace Easysite\Library;
 
 use Easysite\Library\Route;
+use Easysite\Library\Session;
 
 class Application
 {
@@ -14,7 +15,7 @@ class Application
     function __construct(Config $config)
     {
         $this->config=$config;
-        $this->session=new Easysite\Library\Session($config->get('session'));
+        $this->session=new Session($config->get('session'));
         $this->route = new Route($config);
         $this->controller_path = $config->get('pathController');
         $this->view_path = $config->get('viewPath');

@@ -12,9 +12,9 @@ class StorageSession implements StorageSessionInterface{
         $this->setConfig($configSession);
     }
 
-    protected function setConfig(mixed $configSession){
+    protected function setConfig(mixed $configSession){        
        foreach ($configSession as $key => $value) {
-          if($this->$key)  $this->$key=$value;
+          if(property_exists($this, $key))  $this->$key=$value;
           else $this->custom[$key]=$value; 
        } 
     }
