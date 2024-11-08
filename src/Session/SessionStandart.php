@@ -1,18 +1,18 @@
 <?php
 namespace Easysite\Library\Session;
-use Easysite\Library\Interface\Storage\StorageSessionInterface;
-use Easysite\Library\Session\SessionInterface;
+use Easysite\Library\Interface\Config\ConfigSessionInterface;
 
 
-class SessionStandart implements SessionInterface{
+class SessionStandart implements \Easysite\Library\Interface\SessionInterface {
     private mixed $config;
-    function __construct(StorageSessionInterface $config){
+    function __construct(ConfigSessionInterface $config){
         
         session_name($config->getAliase());
+        
        /* if(isset($config['life_time']))
         ini_set();*/
         $this->start();
-        var_dump($config);
+        //var_dump($config);
     }
     function start(){
         session_start();
@@ -30,10 +30,5 @@ class SessionStandart implements SessionInterface{
     function destroy(){
         session_destroy();
     }
-    protected function configSet(){
-
-    }
-    function configGet(){
-
-    }
+    
 }

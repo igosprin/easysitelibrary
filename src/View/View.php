@@ -10,6 +10,7 @@ class View implements ViewInterface
     public mixed $pageElement;
     private string $layoutDefault;
     private string $view_path;
+    
     function __construct()
     {
         $this->pageElement = new PageElement;
@@ -91,7 +92,9 @@ class View implements ViewInterface
         if (empty($this->layoutDefault))
             throw new Exception("Layout is empty");
         return $this->templatePath($this->layoutDefault);
-
+    }
+    public function getConfig(){
+        return $this->config;
     }
 
 }

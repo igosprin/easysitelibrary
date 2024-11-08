@@ -1,12 +1,13 @@
-<?php namespace Easysite\Library\Config\Storage;
+<?php namespace Easysite\Library\Config;
 
-use Easysite\Library\Interface\Storage\StorageSessionInterface;
-class StorageSession implements StorageSessionInterface{
+use Easysite\Library\Interface\Config\ConfigSessionInterface;
+
+
+class ConfigSession implements ConfigSessionInterface{
     private $lifeTime;
     private $driver;
     private $aliase;
     private $filePath;
-    private $custom;
 
     function __construct(mixed $configSession){
         $this->setConfig($configSession);
@@ -15,22 +16,30 @@ class StorageSession implements StorageSessionInterface{
     protected function setConfig(mixed $configSession){        
        foreach ($configSession as $key => $value) {
           if(property_exists($this, $key))  $this->$key=$value;
-          else $this->custom[$key]=$value; 
        } 
     }
+    /**
+     * @inheritDoc
+     */
     public function getLifeTime(){
         return $this->lifeTime;
     }
+    /**
+     * @inheritDoc
+     */
     public function getDriver(): string{
         return $this->driver;
     }
+    /**
+     * @inheritDoc
+     */
     public function getAliase(): string{
         return $this->aliase;
     }
+    /**
+     * @inheritDoc
+     */
     public function getFilePath():string{
         return $this->filePath;
-    }
-    public function getCustom(){
-        return $this->custom;
     }
 }

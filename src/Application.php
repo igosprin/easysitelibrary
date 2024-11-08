@@ -2,7 +2,10 @@
 namespace Easysite\Library;
 
 use Easysite\Library\Route;
-use Easysite\Library\Session;
+use Easysite\Library\Config;
+use Easysite\Library\Instance\Session;
+use Easysite\Library\Instance\Cache;
+use Easysite\Library\Instance\FileManager;
 
 class Application
 {
@@ -10,18 +13,26 @@ class Application
     private $controller_path = '';
     private $view_path = '';
     private $languages_list;
-    private $config;
-    private $session;
-    function __construct(Config $config)
+    private $instances;
+    function __construct()
     {
-        $this->config=$config;
-        $this->session=new Session($config->get('session'));
-        $this->route = new Route($config);
-        $this->controller_path = $config->get('pathController');
-        $this->view_path = $config->get('viewPath');
-        $this->languages_list = $config->get('languagesList',['eng']);
+        Log::log('');
+        $this->onRunInstances();
+        Log::log('');
+        $this->route = new Route(); 
+        Log::log('');    
+        $this->controller_path = Config::get('pathController');
+        $this->view_path = Config::get('viewPath');
+        $this->languages_list = Config::get('languagesList',['eng']);
+        Log::log('');
     }
-
+    protected function onRunInstances(){        
+        Session::runInstance(Config::get('session')->getDriver(),Config::get('session'));
+        Log::log('');
+        FileManager::runInstance();
+        Log::log('');
+        Cache::runInstance(Config::get('cache')->getDriver(),Config::get('cache'));     
+    }
     public function init()
     {
         $this->loadEvent($this->route->searchEvent());
@@ -65,7 +76,7 @@ class Application
             return false;
         require $class_path;
 
-        return new $className;
+        return new $className();
 
     }
     private function getLoadError(string $error)

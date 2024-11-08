@@ -24,6 +24,7 @@ interface ViewInterface
     public function setLayout(string $layout = '');
 
     public function setViewPath(string $path = '');
+    public function getConfig();
 
 
 }

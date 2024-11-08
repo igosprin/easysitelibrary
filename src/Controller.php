@@ -11,8 +11,8 @@ class Controller
     public $_request;
 
     function __construct()
-    {
-        $this->view = new View;
+    {        
+        $this->view = new View();
     }
     public function setRequest(array $languages_list = ['eng'])
     {
@@ -27,6 +27,7 @@ class Controller
     {
         $this->view->setViewPath($path);
     }
+    
 
 
 

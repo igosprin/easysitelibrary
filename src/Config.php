@@ -1,45 +1,49 @@
 <?php 
 namespace Easysite\Library;
-use Easysite\Library\Config\ConfigStorage;
 use Easysite\Library\Exeptions\EasysiteExeption;
+use Easysite\Library\Helpers\Helpers;
 
 class Config {
-    private $config;
-    function __construct(){
-        $this->config=new ConfigStorage;
-    }
-    
-    public function getAll(){
-        return $this->config;
-    }
-    public function get(string $key,$default=null){  
-        $key=$this->getKeyName($key);      
-        if($this->issetKey($key))
-            return $this->config->$key;
+    protected static $config;
+    /**
+     * Get value from config
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public static function get(string $key,$default=null): mixed{  
+        if(static::has($key))
+            return static::$config[$key];
         return $default; 
     }
-    public function set(string $key,$value){
-        $key=$this->getKeyName($key);
-        $this->config->$key=$value;            
+    /**
+     * Show all keys and values
+     * @return mixed
+     */
+    public static function getAll(){
+        return static::$config;
     }
-    protected function issetKey(string $key){
-        $key=$this->getKeyName($key);
+    /**
+     * Create value in config
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    public static function set(string $key,$value){
+        $key=Helpers::getKeyConfig($key);      
+        static::$config[$key]=$value;                    
+    }    
+    /**
+     * Summary of has
+     * @param mixed $key
+     * @throws \Easysite\Library\Exeptions\EasysiteExeption
+     * @return bool
+     */
+    public static function has($key): bool{
+        $key=Helpers::getKeyConfig($key);
         if(empty($key)) throw new EasysiteExeption('None key');
-        
-        if(isset($this->config->$key)) return true;
-        return false;
-    }
-    protected function getKeyName(string $key){
-        $key=trim(str_replace(['-','_'],':',$key));
-        $keyTmp=explode(':',$key);
-        $keyItems=array_map(fn($item)=>ucfirst($item),$keyTmp);
-        return lcfirst(implode('',$keyItems));
+        if(!isset(static::$config[$key])) return false;
+        return true;
     }
 
-    protected function loadConfig(){
-       $dirStorage=ROOT_PATH.'/storage/';
-       if(file_exists($dirStorage.'config')){
-            
-       } 
-    }
 }
