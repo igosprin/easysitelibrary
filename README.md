@@ -4,5 +4,7 @@ Installation
 
 composer require easysite/library;
 
+See [CHANGELOG.md](CHANGELOG.md) for what changed between versions.
+
 
 

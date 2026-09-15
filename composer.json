@@ -1,5 +1,8 @@
 {
     "name": "easysite/library",
+    "description": "Library for EasySite",
+    "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "igor sprinchan",
@@ -7,11 +10,11 @@
         }
     ],
     "require": {
-      "php": "^8.0"
+        "php": "^8.4"
     },
     "autoload": {
-   "psr-4": {
-     "Easysite\\Library\\": "src/"
-   }
- }
+        "psr-4": {
+            "Easysite\\Library\\": "src/"
+        }
+    }
 }
