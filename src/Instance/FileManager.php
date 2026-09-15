@@ -5,6 +5,7 @@ use \Easysite\Library\Instances;
  * Session instance
  *
  * @method static void createFile(string $filePath,string $content);
+ * @method static void appendFile(string $filePath,string $content);
  * @method static string getFile(string $filePath);
  * @method static void deleteFile(string $filePath);
  * @method static void permissionFile(string $filePath,$permission=0777);
@@ -20,7 +21,6 @@ use \Easysite\Library\Instances;
  */
 
 class FileManager extends Instances {
-    public static $classInstance=\Easysite\Library\File\FileSystems::class;
     protected static function instanceAliace(){        
         return 'fileManager';
     }  

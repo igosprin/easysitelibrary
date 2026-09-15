@@ -9,6 +9,8 @@ class Controller
     public $view;
     public $_url_params;
     public $_request;
+    public \Easysite\Library\Db $dbRepository;
+    public $_model;
 
     function __construct()
     {        
@@ -27,8 +29,4 @@ class Controller
     {
         $this->view->setViewPath($path);
     }
-    
-
-
-
 }

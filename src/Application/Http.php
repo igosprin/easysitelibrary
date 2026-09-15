@@ -1,38 +1,34 @@
-<?php
-namespace Easysite\Library;
-
+<?php 
+namespace Easysite\Library\Application;
 use Easysite\Library\Route;
 use Easysite\Library\Config;
-use Easysite\Library\Instance\Session;
-use Easysite\Library\Instance\Cache;
-use Easysite\Library\Instance\FileManager;
+use Easysite\Library\Db;
 
-class Application
+class Http extends App
 {
     private $route;
+    private $db;
     private $controller_path = '';
     private $view_path = '';
     private $languages_list;
-    private $instances;
-    function __construct()
+    function __construct(array $arrayInstances)
     {
-        Log::log('');
-        $this->onRunInstances();
-        Log::log('');
-        $this->route = new Route(); 
-        Log::log('');    
+        $this->initInstances($arrayInstances);       
+        $this->route = new Route();
+        $this->db = new Db(Config::get('database'));         
         $this->controller_path = Config::get('pathController');
         $this->view_path = Config::get('viewPath');
         $this->languages_list = Config::get('languagesList',['eng']);
-        Log::log('');
+        
     }
-    protected function onRunInstances(){        
+   
+    /*protected function onRunInstances(){
+        \Easysite\Library\Instance\FileManager::runInstance();     
         Session::runInstance(Config::get('session')->getDriver(),Config::get('session'));
-        Log::log('');
-        FileManager::runInstance();
+        Log::log('');        
         Log::log('');
         Cache::runInstance(Config::get('cache')->getDriver(),Config::get('cache'));     
-    }
+    }*/
     public function init()
     {
         $this->loadEvent($this->route->searchEvent());
@@ -54,6 +50,8 @@ class Application
         $event_class->setRequest($this->languages_list);
         $event_class->setViewPath($this->view_path);
         $event_class->_url_params = $action['params'];
+        $event_class->dbRepository = $this->db;        
+        $event_class->_model = $this->getEventModel($action['controller'],$this->db);        
 
         $method_name = $action['action'] . 'Action';
         if (!method_exists($event_class, $action['action'] . 'Action')) {
@@ -66,7 +64,6 @@ class Application
 
     private function getEventClass(string $className)
     {
-
         if (empty($className))
             return false;
         $className .= 'Controller';
@@ -77,10 +74,30 @@ class Application
         require $class_path;
 
         return new $className();
-
+    }
+    private function getEventModel(string $modelName, $dbRepository)
+    {
+        if (!empty($modelName)){
+            $modelName .= 'Model';
+            $model_path = Config::get('pathModel') . $modelName . '.php'; 
+            if (file_exists($model_path)){
+                require $model_path;
+                return new $modelName($dbRepository);
+            }
+        }
+        return null;
     }
     private function getLoadError(string $error)
     {
+        // getLoadError must always terminate the request — loadEvent() keeps running
+        // past its call sites and would use a bogus $event_class otherwise.
+        $event_class = $this->getEventClass('error');
+        if ($event_class && method_exists($event_class, 'error404')) {
+            $event_class->setRequest($this->languages_list);
+            $event_class->setViewPath($this->view_path);
+            $event_class->error404($error);
+            exit;
+        }
         echo $error;
         die('error');
     }

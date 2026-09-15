@@ -5,16 +5,25 @@ use Easysite\Library\Interface\Config\ConfigSessionInterface;
 
 class SessionStandart implements \Easysite\Library\Interface\SessionInterface {
     private mixed $config;
+
     function __construct(ConfigSessionInterface $config){
-        
-        session_name($config->getAliase());
-        
-       /* if(isset($config['life_time']))
-        ini_set();*/
+        $this->config = $config;
         $this->start();
-        //var_dump($config);
     }
+
     function start(){
+        // Avoid "headers already sent" if something echoed before session init.
+        if (session_status() !== PHP_SESSION_NONE) {
+            return;
+        }
+        if (headers_sent()) {
+            // Cannot safely start session once headers are out; fail softly.
+            return;
+        }
+        $alias = $this->config->getAliase();
+        if (!empty($alias)) {
+            session_name($alias);
+        }
         session_start();
     }
     function get(string $key, $default = null){

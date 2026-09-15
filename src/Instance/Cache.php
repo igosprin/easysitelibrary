@@ -1,5 +1,7 @@
 <?php 
 namespace Easysite\Library\Instance;
+
+use Easysite\Library\Config;
 use \Easysite\Library\Instances;
 /**
  * Cache instance
@@ -14,13 +16,17 @@ use \Easysite\Library\Instances;
  */
 
 class Cache extends Instances {
-    protected static function getDriversAliaces(){        
-        return[
-            'file'=>\Easysite\Library\Cache\CacheFile::class
-        ];
-   }
+    
     protected static function instanceAliace(){        
         return 'cache';
-    }  
+    } 
+    protected static function getConfig()
+    {
+        return Config::get('cache');
+    }
+    protected static function getDriver()
+    {
+        return Config::get('cache')->getDriver();
+    } 
 }
 

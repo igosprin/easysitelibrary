@@ -2,8 +2,13 @@
 namespace Easysite\Library\Helpers;
 
 class Helpers{
+    
     static function getDriverName($driver){
-        return strtolower (trim($driver));
+        return is_null($driver) ? $driver : strtolower (trim($driver));
+    }
+    static function getDbConnector($connector): string{
+        $connector=trim($connector);
+        return strlen($connector)==0 ? '' : ucfirst(strtolower ($connector));
     }
     static function getKeyCache(string $inputKey){
         $inputKey=trim($inputKey);        

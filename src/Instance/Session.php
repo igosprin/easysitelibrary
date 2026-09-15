@@ -1,5 +1,7 @@
 <?php
 namespace Easysite\Library\Instance;
+
+use Easysite\Library\Config;
 use Easysite\Library\Instances;
 
 /**
@@ -14,12 +16,15 @@ use Easysite\Library\Instances;
  */
 
 class Session extends Instances {
-    protected static function getDriversAliaces(){        
-        return[
-            'standart'=>\Easysite\Library\Session\SessionStandart::class
-        ];
-   }
     protected static function instanceAliace(){        
         return 'session';
+    }
+    protected static function getConfig()
+    {
+        return Config::get('session');
+    }
+    protected static function getDriver()
+    {
+       return Config::get('session')->getDriver();
     }  
 }

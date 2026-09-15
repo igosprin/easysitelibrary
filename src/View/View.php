@@ -94,7 +94,7 @@ class View implements ViewInterface
         return $this->templatePath($this->layoutDefault);
     }
     public function getConfig(){
-        return $this->config;
+        return [];
     }
 
 }
