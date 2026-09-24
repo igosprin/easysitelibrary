@@ -22,6 +22,11 @@ interface CacheInterface{
      */
     public function clear(string $key):void;
     /**
+     * Clear the whole cache.
+     * @return void
+     */
+    public function clearAll():void;
+    /**
      * Check for cache existence
      * @param string $key
      * @return bool

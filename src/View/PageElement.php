@@ -5,13 +5,16 @@ use Easysite\Library\Interface\PageElementInterface;
 
 class PageElement implements PageElementInterface
 {
-    protected string $title;
-    protected array $scripts;
-    protected array $styles;
-    protected string $content_Languages;
-    protected array $keywords;
-    protected array $description;
-    protected string $content_stream;
+    // Default values — otherwise a typed property throws "must not be accessed before
+    // initialization" on any getter whose setter the controller never called (e.g.
+    // errorController::error404 never calls setScripts()).
+    protected string $title = '';
+    protected array $scripts = [];
+    protected array $styles = [];
+    protected string $content_Languages = '';
+    protected array $keywords = [];
+    protected array $description = [];
+    protected string $content_stream = '';
 
     public function setTitle(string $title = '')
     {

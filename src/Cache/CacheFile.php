@@ -40,12 +40,41 @@ class CacheFile implements \Easysite\Library\Interface\CacheInterface{
      * @inheritDoc
      */
     public function clear($key): void{
-
+        $pathInfo=$this->getFileDir(Helpers::getKeyCache($key));
+        if(!$this->issetCacheFile($pathInfo))
+            return;
+        $cacheFileSettings=$this->cacheFileSettings($pathInfo['filename']);
+        FileManager::deleteFile($pathInfo['dirname'].'/'.$cacheFileSettings['cacheFile']);
+        FileManager::deleteFile($pathInfo['dirname'].'/'.$cacheFileSettings['settingsFile']);
     }
     /**
      * @inheritDoc
      */
-    public function isset($key): bool{        
+    public function clearAll(): void{
+        $this->clearDir($this->rootPath);
+        $this->createIgnoredFile($this->rootPath);
+    }
+    /** Recursively wipe a directory's contents, keep the directory itself (still needed afterwards). */
+    protected function clearDir(string $path): void{
+        if(!FileManager::issetDir($path))
+            return;
+        foreach(scandir($path) as $item){
+            if($item==='.' || $item==='..')
+                continue;
+            $full=$path.'/'.$item;
+            if(is_dir($full)){
+                $this->clearDir($full);
+                FileManager::deleteDir($full);
+            }
+            else{
+                FileManager::deleteFile($full);
+            }
+        }
+    }
+    /**
+     * @inheritDoc
+     */
+    public function isset($key): bool{
         return $this->issetCacheFile($this->getFileDir(Helpers::getKeyCache($key)));
     }
     /**

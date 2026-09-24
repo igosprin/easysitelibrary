@@ -9,6 +9,7 @@ use \Easysite\Library\Instances;
  * @method static void set($key,$value,$lifeTime=0);
  * @method static mixed get($key);
  * @method static void clear($key);
+ * @method static void clearAll();
  * @method static void isset($key);
  * @method static mixed make($key,$callback,$lifeTime=0);
  *
