@@ -23,6 +23,29 @@ class SqlRepository implements SqlRepositoryInterface{
         return $this->config;
     }
 
+    private static string $debugBuffer = '';
+    private static bool $debugShutdownRegistered = false;
+
+    /**
+     * debugDumpParams() echoes straight into the response body — if that happens before
+     * header()/setcookie() in a controller (and ConfigDb debug=true dumps on EVERY query),
+     * those silently stop working ("headers already sent").
+     * So the dumps are buffered and printed all at once at the end of the script, after
+     * the controller has already sent its headers/cookies/redirects.
+     */
+    private function debugDump($statement): void{
+        ob_start();
+        $statement->debugDumpParams();
+        self::$debugBuffer .= ob_get_clean();
+
+        if(!self::$debugShutdownRegistered){
+            self::$debugShutdownRegistered = true;
+            register_shutdown_function(function(){
+                echo self::$debugBuffer;
+            });
+        }
+    }
+
     /**
      * @inheritDoc
      */
@@ -68,7 +91,7 @@ class SqlRepository implements SqlRepositoryInterface{
             
             $statement->execute();
             if($this->config->getDebug()){
-                $statement->debugDumpParams(); 
+                $this->debugDump($statement);
             }
             unset($statement);
             return $this->pdo->lastInsertId();
@@ -101,7 +124,7 @@ class SqlRepository implements SqlRepositoryInterface{
                 $statement->execute($executeStatements);
             }
             if($this->config->getDebug()){
-                $statement->debugDumpParams(); 
+                $this->debugDump($statement);
             }
             unset($statement);
         }
@@ -136,8 +159,8 @@ class SqlRepository implements SqlRepositoryInterface{
             $this->bindParamIUD($statement,$where_sql['params'],$columns);
             $statement->execute();
             if($this->config->getDebug()){
-                $statement->debugDumpParams(); 
-            } 
+                $this->debugDump($statement);
+            }
             unset($statement);
             return true;
         }
@@ -161,7 +184,7 @@ class SqlRepository implements SqlRepositoryInterface{
             $this->bindParamIUD($statement,$where_sql['params'],$columns);
             $statement->execute();
             if($this->config->getDebug()){
-                $statement->debugDumpParams(); 
+                $this->debugDump($statement);
             }
             unset($statement);
             return true;
@@ -186,7 +209,7 @@ class SqlRepository implements SqlRepositoryInterface{
             
             $statement->execute(count($prepareSelectIn['paramsIn']) > 0 ? $prepareSelectIn['paramsIn'] : null);
             if($this->config->getDebug()){
-                $statement->debugDumpParams(); 
+                $this->debugDump($statement);
             }
 
             return $statement;

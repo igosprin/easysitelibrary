@@ -11,6 +11,7 @@ class Controller
     public $_request;
     public \Easysite\Library\Db $dbRepository;
     public $_model;
+    public ?Auth $auth = null;
 
     function __construct()
     {        

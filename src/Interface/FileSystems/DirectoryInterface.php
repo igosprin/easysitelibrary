@@ -15,7 +15,7 @@ interface DirectoryInterface{
      */
     public function deleteDir(string $path);
     /**
-     * Сheck directory existence
+     * Check directory existence
      * @param string $path
      * @return void
      */

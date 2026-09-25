@@ -15,9 +15,9 @@ class Helpers{
         return str_replace(':','/',$inputKey);   
     }
     static function getKeyConfig(string $inputKey):string {
-        return self::сamelCase($inputKey);    
+        return self::camelCase($inputKey);    
     }
-    static function сamelCase($input):string {
+    static function camelCase($input):string {
         $input=trim(str_replace(self::getArraySymbols(),'',$input));
         $input=str_replace(['-','_'],':',$input); 
         return lcfirst(implode('',array_map(fn($item)=>ucfirst($item),explode(':',$input))));

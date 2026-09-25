@@ -44,43 +44,38 @@ class Route extends Request
         } else {
             $keyRoute = strtolower($this->getRequestMethod()) . '&' . $params[0];
             if (isset($this->_routs[$keyRoute]) and isset($this->_routs[$keyRoute]['events']['&default'])) {
-                $action['controller'] = $this->_routs[$keyRoute]['events']['&default']['controller'];
-                $action['action'] = $this->_routs[$keyRoute]['events']['&default']['action'];
+                // array_merge (not picking controller/action one by one) so that extra route keys
+                // from config/routs.php (middleware, dir, ...) reach Http::loadEvent()
+                $action = array_merge($action, $this->_routs[$keyRoute]['events']['&default']);
                 if (isset($params[1]) and !empty($params[1])) {
                     if (isset($this->_routs[$keyRoute]['events'][$params[1]])) {
                         $temp_ = $this->_routs[$keyRoute]['events'][$params[1]];
                         if (isset($params[2]) and !empty($params[2])) {
                             if (isset($temp_['events'][$params[2]])) {
-                                $action['controller'] = $temp_['events'][$params[2]]['controller'];
-                                $action['action'] = $temp_['events'][$params[2]]['action'];
+                                $action = array_merge($action, $temp_['events'][$params[2]]);
                                 $action['a'] = 1;
                             } elseif (isset($temp_['events']['&2'])) {
-                                $action['controller'] = $temp_['events']['&2']['controller'];
-                                $action['action'] = $temp_['events']['&2']['action'];
+                                $action = array_merge($action, $temp_['events']['&2']);
                                 $action['params'][$temp_['events']['&2']['param']] = $params[2];
                                 $action['a'] = 2;
                             }
                         } else {
-                            $action['controller'] = $temp_['controller'];
-                            $action['action'] = $temp_['action'];
+                            $action = array_merge($action, $temp_);
                         }
                     } elseif (isset($this->_routs[$keyRoute]['events']['&1'])) {
                         $temp_ = $this->_routs[$keyRoute]['events']['&1'];
                         $action['params'][$temp_['param']] = $params[1];
                         if (isset($params[2]) and !empty($params[2])) {
                             if (isset($temp_['events'][$params[2]])) {
-                                $action['controller'] = $temp_['events'][$params[2]]['controller'];
-                                $action['action'] = $temp_['events'][$params[2]]['action'];
+                                $action = array_merge($action, $temp_['events'][$params[2]]);
                                 $action['a2'] = 1;
                             } elseif (isset($temp_['events']['&2'])) {
-                                $action['controller'] = $temp_['events']['&2']['controller'];
-                                $action['action'] = $temp_['events']['&2']['action'];
+                                $action = array_merge($action, $temp_['events']['&2']);
                                 $action['params'][$temp_['events']['&2']['param']] = $params[2];
                                 $action['a2'] = 2;
                             }
                         } else {
-                            $action['controller'] = $temp_['controller'];
-                            $action['action'] = $temp_['action'];
+                            $action = array_merge($action, $temp_);
                             $action['a2'] = 0;
 
                         }

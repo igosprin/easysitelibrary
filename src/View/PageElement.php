@@ -15,6 +15,7 @@ class PageElement implements PageElementInterface
     protected array $keywords = [];
     protected array $description = [];
     protected string $content_stream = '';
+    protected ?array $auth_user = null;
 
     public function setTitle(string $title = '')
     {
@@ -81,6 +82,16 @@ class PageElement implements PageElementInterface
     public function getContent(): string
     {
         return $this->content_stream;
+    }
+
+    /** Currently logged-in user (users row) for the layout navbar. Null for a guest. */
+    public function setAuthUser(?array $auth_user = null)
+    {
+        $this->auth_user = $auth_user;
+    }
+    public function getAuthUser(): ?array
+    {
+        return $this->auth_user;
     }
 
 }

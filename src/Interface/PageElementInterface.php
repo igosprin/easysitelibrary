@@ -24,6 +24,6 @@ interface PageElementInterface
     
     public function getContent(): string;
 
-
+    public function getAuthUser(): ?array;
 
 }

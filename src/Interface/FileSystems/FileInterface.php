@@ -2,7 +2,7 @@
 namespace Easysite\Library\Interface\FileSystems;
 interface FileInterface{
     /**
-     * Сreate file
+     * Create file
      * @param string $filePath
      * @param string $content
      * @return void
