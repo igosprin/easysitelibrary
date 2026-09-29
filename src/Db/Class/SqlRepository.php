@@ -51,7 +51,7 @@ class SqlRepository implements SqlRepositoryInterface{
      */
     public function getById(string $table,int | string $id, array $select = [])
     {
-        $sql = "SELECT ".count($select) > 0 ? join(',',$select) : "*" ." FROM ". $table ." WHERE id = :id LIMIT 1"; 
+        $sql = "SELECT " . (count($select) > 0 ? join(',',$select) : "*") . " FROM ". $table ." WHERE id = :id LIMIT 1";
         return $this->fetchOne($sql,['id' => $id]);
     }
 

@@ -30,6 +30,7 @@ All notable changes to `easysite/library` are documented here.
 - `View\PageElement`'s properties (`$scripts`, `$styles`, `$title`, ...) were typed with no default, so any getter (`getScripts()`, ...) fatals with "must not be accessed before initialization" if the matching setter was never called for that request — e.g. a controller that renders a layout looping over `getScripts()` without itself calling `setScripts()` first (hit this via `errorController::error404()`, which never sets scripts). Given all defaults.
 
 - `CacheFile::clear($key)` was an empty stub (calls succeeded but deleted nothing, so callers had to fake invalidation with `set($key, null, 1)`). It now removes the cache and settings files, and does nothing for a missing key.
+- `SqlRepository::getById()` built its `SELECT` with `"SELECT ".count($select) > 0 ? ... : ...` — string concatenation binds tighter than `?:`/`>` in PHP, so with the default `$select = []` the whole expression evaluated to an empty string, producing an empty SQL query on every call. Parenthesized the ternary; no caller in this package used the method with the default argument before now, so this was previously silent.
 - `Helpers::сamelCase()` had a Cyrillic `с` in its name (definition and its single call site); renamed to `camelCase()`. Two docblocks (`FileInterface`, `DirectoryInterface`) had Cyrillic `С` letters in "Create"/"Check" — fixed.
 
 ### Removed
