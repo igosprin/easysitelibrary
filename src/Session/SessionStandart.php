@@ -24,6 +24,16 @@ class SessionStandart implements \Easysite\Library\Interface\SessionInterface {
         if (!empty($alias)) {
             session_name($alias);
         }
+        // cookie недоступна из JS, не уходит с запросами с чужих сайтов (кроме переходов по ссылке),
+        // по https — только по https; чужой id сессии из cookie не принимается (strict mode)
+        ini_set('session.use_strict_mode', '1');
+        ini_set('session.use_only_cookies', '1');
+        session_set_cookie_params([
+            'path'     => '/',
+            'secure'   => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
         session_start();
     }
     function get(string $key, $default = null){
