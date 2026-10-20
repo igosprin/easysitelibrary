@@ -41,6 +41,11 @@ class SqlRepository implements SqlRepositoryInterface{
         if(!self::$debugShutdownRegistered){
             self::$debugShutdownRegistered = true;
             register_shutdown_function(function(){
+                // don't append the debug dump to a JSON response (fetch/AJAX) — the browser couldn't parse it
+                foreach(headers_list() as $header){
+                    if(stripos($header, 'content-type:') === 0 && stripos($header, 'json') !== false)
+                        return;
+                }
                 echo self::$debugBuffer;
             });
         }
