@@ -38,6 +38,7 @@ class Route extends Request
 
         ];
         $params = $this->getUrlParam();
+        $depth = 0; // сколько сегментов URL совпало с маршрутом (лишние — 404, см. конец метода)
         if (empty($params[0])) {
             $action['controller'] = 'index';
             $action['action'] = 'index';
@@ -47,17 +48,21 @@ class Route extends Request
                 // array_merge (not picking controller/action one by one) so that extra route keys
                 // from config/routs.php (middleware, dir, ...) reach Http::loadEvent()
                 $action = array_merge($action, $this->_routs[$keyRoute]['events']['&default']);
+                $depth = 1;
                 if (isset($params[1]) and !empty($params[1])) {
                     if (isset($this->_routs[$keyRoute]['events'][$params[1]])) {
                         $temp_ = $this->_routs[$keyRoute]['events'][$params[1]];
+                        $depth = 2;
                         if (isset($params[2]) and !empty($params[2])) {
                             if (isset($temp_['events'][$params[2]])) {
                                 $action = array_merge($action, $temp_['events'][$params[2]]);
                                 $action['a'] = 1;
+                                $depth = 3;
                             } elseif (isset($temp_['events']['&2'])) {
                                 $action = array_merge($action, $temp_['events']['&2']);
                                 $action['params'][$temp_['events']['&2']['param']] = $params[2];
                                 $action['a'] = 2;
+                                $depth = 3;
                             }
                         } else {
                             $action = array_merge($action, $temp_);
@@ -65,14 +70,17 @@ class Route extends Request
                     } elseif (isset($this->_routs[$keyRoute]['events']['&1'])) {
                         $temp_ = $this->_routs[$keyRoute]['events']['&1'];
                         $action['params'][$temp_['param']] = $params[1];
+                        $depth = 2;
                         if (isset($params[2]) and !empty($params[2])) {
                             if (isset($temp_['events'][$params[2]])) {
                                 $action = array_merge($action, $temp_['events'][$params[2]]);
                                 $action['a2'] = 1;
+                                $depth = 3;
                             } elseif (isset($temp_['events']['&2'])) {
                                 $action = array_merge($action, $temp_['events']['&2']);
                                 $action['params'][$temp_['events']['&2']['param']] = $params[2];
                                 $action['a2'] = 2;
+                                $depth = 3;
                             }
                         } else {
                             $action = array_merge($action, $temp_);
@@ -82,6 +90,11 @@ class Route extends Request
                     }
                 }
             }
+        }
+        // лишние сегменты (/team/x/anything, /about-us/x) раньше молча отдавали родительскую страницу с 200 —
+        // дубли для поисковиков. Теперь — пустой controller, Http::loadEvent() отдаёт 404. Слэш в конце не считается.
+        if (count(array_filter($params, fn ($p) => $p !== '')) > $depth && $action['controller'] !== '') {
+            return ['controller' => '', 'action' => '', 'params' => []];
         }
         return $action;
     }
